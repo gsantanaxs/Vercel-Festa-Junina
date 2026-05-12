@@ -3,41 +3,39 @@ const router = express.Router();
 const supabase = require('../data/supabase');
 
 router.get('/', async (req, res, next) => {
-    try{
+    try {
 
         const { data, error } = await supabase
-        .from('categorias')
-        .select('*')
-        .order('id', { ascending: true });
+            .from('ingressos')
+            .select('*')
+            .order('id', { ascending: false });
 
-        if (error){
-            throw error;
-        }
+        if (error) throw error;
 
         res.json(data);
 
-    }catch (err) {
+    } catch (err) {
         next(err);
     }
 });
 
 router.post('/', async (req, res, next) => {
-    try{
+    try {
 
         const { data, error } = await supabase
-        .from('categorias')
-        .insert([{nome: req.body.nome}])
-        .select();
+            .from('ingressos')
+            .insert([req.body])
+            .select();
 
         if (error) throw error;
 
         res.status(201).json({
             sucesso: true,
-            mensagem: '🎶 Categoria criada com sucesso!',
-            categoria: data[0]
+            mensagem: '🎟️ Ingresso reservado com sucesso!',
+            ingresso: data[0]
         });
 
-    }catch (err) {
+    } catch (err) {
         next(err);
     }
 });
